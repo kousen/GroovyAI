@@ -17,7 +17,7 @@ src/main/groovy/com/kousenit/
 ├── ApiCall.groovy          # Record for API request data
 ├── OpenAIClient.groovy     # HTTP client for OpenAI API
 ├── ReasoningEffort.groovy  # Enum for effort levels (LOW, MEDIUM, HIGH)
-├── SummaryType.groovy      # Enum for summary types (AUTO, CONCISE, DETAILED)
+├── SummaryType.groovy      # Enum for summary types (AUTO, DETAILED) - CONCISE not supported by all models
 └── Main.groovy            # Usage example
 ```
 
@@ -27,7 +27,7 @@ src/main/groovy/com/kousenit/
 // Create client and request
 def client = new OpenAIClient()
 def request = new ApiCall(
-    model: 'gpt-4',
+    model: 'gpt-5-nano',
     input: 'Write a haiku about Groovy programming.',
     summary: SummaryType.DETAILED,
     effort: ReasoningEffort.HIGH
@@ -41,6 +41,18 @@ if (response.statusCode() == 200) {
     def result = new JsonSlurper().parseText(response.body())
     // Extract reasoning and content...
 }
+```
+
+### Demo Script
+
+For a complete working example, see `Main.groovy` which demonstrates:
+- API client usage with default parameters
+- Response processing and error handling
+- Extracting both reasoning summaries and message content
+
+Run the demo with:
+```bash
+./gradlew run
 ```
 
 ## Configuration
@@ -60,8 +72,10 @@ The project includes comprehensive tests using Spock Framework with WireMock for
 
 ### Test Coverage
 
-- **OpenAIClientSpec**: Tests HTTP client functionality, error handling, and timeout behavior
-- **ApiCallSpec**: Tests JSON generation, enum combinations, and input validation
+- **OpenAIClientSpec**: Unit tests using WireMock for HTTP client functionality, error handling, and timeout behavior
+- **OpenAIIntegrationSpec**: Integration tests with real OpenAI API calls (requires API key)
+
+**Note**: Integration tests are automatically skipped if the `OPENAI_API_KEY` environment variable is not set.
 
 ## Dependencies
 
@@ -71,6 +85,8 @@ The project includes comprehensive tests using Spock Framework with WireMock for
 - **Security**: Forced dependency versions to address CVEs
 
 **Note on Groovy 5**: The core application code is fully compatible with Groovy 5.0.0. However, the project currently uses Groovy 4.0.22 due to Spock Framework's compatibility constraints. Once Spock releases a version supporting Groovy 5, this project will be updated accordingly.
+
+**Model Compatibility**: Different OpenAI models support different parameter combinations. For example, `gpt-5-nano` only supports `'detailed'` and `'auto'` summary types, not `'concise'`. Always check the API documentation for model-specific limitations.
 
 ## Security
 
