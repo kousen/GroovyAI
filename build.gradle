@@ -1,5 +1,7 @@
 plugins {
     id 'groovy'
+    id 'jacoco'
+    id 'org.sonarqube' version '6.2.0.5505'
 }
 
 group = 'com.kousenit'
@@ -41,4 +43,20 @@ configurations.configureEach {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "kousen_GroovyAI"
+        property "sonar.organization", "kousen-it-inc"
+    }
 }
