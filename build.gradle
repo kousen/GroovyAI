@@ -54,7 +54,10 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/demo_script*.class'])
+            fileTree(dir: it, exclude: [
+                '**/demo_script*.class',
+                '**/parseText*.class'
+            ])
         }))
     }
 }
