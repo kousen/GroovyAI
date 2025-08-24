@@ -1,0 +1,43 @@
+plugins {
+    id 'groovy'
+}
+
+group = 'com.kousenit'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('org.apache.groovy:groovy-bom:4.0.22')
+    implementation 'org.apache.groovy:groovy-json'
+
+    testImplementation platform('org.spockframework:spock-bom:2.3-groovy-4.0')
+    testImplementation 'org.spockframework:spock-core'
+    testImplementation 'org.wiremock:wiremock:3.3.1'
+    
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// WireMock is a mess of transitive vulnerabilities
+configurations.configureEach {
+    resolutionStrategy.force(
+        // Security fixes for WireMock transitive dependencies
+        'org.eclipse.jetty:jetty-http:11.0.25',                 // CVE-2024-6763
+        'org.eclipse.jetty:jetty-server:11.0.25',               // CVE-2024-8184
+        'org.eclipse.jetty:jetty-servlet:11.0.25',
+        'org.eclipse.jetty:jetty-servlets:11.0.25',
+        'org.eclipse.jetty:jetty-webapp:11.0.25',
+        'org.eclipse.jetty:jetty-proxy:11.0.25',
+        'org.eclipse.jetty.http2:http2-server:11.0.25',
+        'org.eclipse.jetty.http2:http2-common:11.0.25',
+        'org.apache.commons:commons-lang3:3.18.0',             // CVE-2025-48924
+        'com.jayway.jsonpath:json-path:2.9.0',
+        'org.xmlunit:xmlunit-core:2.10.0'                      // CVE-2024-31573
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
