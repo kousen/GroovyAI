@@ -18,7 +18,7 @@ src/main/groovy/com/kousenit/
 ├── OpenAIClient.groovy     # HTTP client for OpenAI API
 ├── ReasoningEffort.groovy  # Enum for effort levels (LOW, MEDIUM, HIGH)
 ├── SummaryType.groovy      # Enum for summary types (AUTO, DETAILED) - CONCISE not supported by all models
-└── Main.groovy            # Usage example
+└── demo_script.groovy     # Usage example
 ```
 
 ## Usage
@@ -45,7 +45,7 @@ if (response.statusCode() == 200) {
 
 ### Demo Script
 
-For a complete working example, see `Main.groovy` which demonstrates:
+For a complete working example, see `demo_script.groovy` which demonstrates:
 - API client usage with default parameters
 - Response processing and error handling
 - Extracting both reasoning summaries and message content
